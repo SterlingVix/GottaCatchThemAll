@@ -57,10 +57,10 @@ angular.module('catchem.auth', ['catchem.services'])
 
   var FBlogin = function() {
     FB.login(function(response) {
-      // handle the response
-      statusChangeCallback(response);
-    }, {scope: 'public_profile, email, user_friends'});
-  }
+      statusChangeCallback(response); // handle the response
+    },
+    {scope: 'public_profile, email, user_friends'}); // end FB.login()
+  }; // end FBLogin()
 
   // This is called with the results from FB.getLoginStatus().
   var statusChangeCallback = function(response) {
@@ -86,11 +86,12 @@ angular.module('catchem.auth', ['catchem.services'])
   var testAPI = function() {
     // console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
-      // console.log('Response data: ', response);
+      console.log('Response data: ', response);
       User.setPersonalProfile("full_name", response.name);
       User.setPersonalProfile("first_name", response.first_name);
       User.setPersonalProfile("last_name", response.last_name);
-      User.setPersonalProfile("facebook_id", response.id);
+      User.setPersonalProfile("id", response.id); // for standard id field...
+      // User.setPersonalProfile("facebook_id", response.id);
       User.setPersonalProfile("gender", response.gender);
       User.setPersonalProfile("loggedIn", true);
       
@@ -143,7 +144,7 @@ angular.module('catchem.auth', ['catchem.services'])
   }
 })
 .controller('AuthController', function(AuthFactory, $scope) {
-  $scope.user = AuthFactory.user;
+  $scope.user = AuthFactory.user; // auto-populated data might be happening here...
   $scope.FBlogout = AuthFactory.FBlogout;
   $scope.FBlogin = AuthFactory.FBlogin;
 });
