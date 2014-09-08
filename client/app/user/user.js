@@ -28,7 +28,8 @@ angular.module('catchem.user', ['catchem.services'])
     myProfile: myProfile,
     addQuestion: addQuestion
   }
-})
+}) // end .factory()
+
 .controller('UserController', ['$scope', 'User', 'UserFactory', function($scope, User, UserFactory) {
   // Is the question and answer input empty?
   $scope.blank = false;
@@ -46,11 +47,9 @@ angular.module('catchem.user', ['catchem.services'])
         answer: false
       }
     ],
-    pointValue: 1400
+    pointValue: 1400,
+    id: 456321
   }; // end $scope.aProfile
-
-
-
 
 
   $scope.myProfile = UserFactory.myProfile;
@@ -102,10 +101,72 @@ $scope.makeConformantProfileObject = function(user) {
 
 
 
+var getNewUserTemplate = function() {
+    /*****************
+     * This is the DATABASE-CONFORMANT USER/PROFILE OBJECT.
+     * Generating an empty version is not necessary here,
+     * but it's instructive during development.
+     * Reference this, and if changes are made, watch out for
+     * errors elsewhere!
+     *
+     * FYI: FB Client returns the following object:
+     *    user = {
+     *      full_name: 'full name',
+     *      first_name: 'first name',
+     *      last_name: 'last name',
+     *      id: Facebook ID,
+     *      email: 'email address',
+     *      gender: 'gender'
+     *    }
+     ****************/
+    var userTemplate = {
+      id:         0,
+      full_name:  '',
+      first_name: '',
+      last_name:  '',
+      email:      '',
+      gender:     '',
+      photo:      '',
+      about:      '',
+      pointValue: 1,
+      questions:  [], // format here is "{ question: 'q', answer: true},"
+      collection: {}, // id: id
+      owners:     {}, // id: id
+      visitedProfiles: {} // store here with id as the key
+    }; // end userTemplate
+
+    return userTemplate;
+  }; // end getNewUserTemplate()
 
 
 
 
+  $scope.updateVisitedProfile = function(profile) {
+    /*********************
+     * visitedProfiles objects are stored as follows:
+     *   result = {
+     *     id: {
+     *       lastVisited: [], // array of Date objects
+     *       status: 0 // or ___ -1 for rejected ___ or ___ % complete ___ as a number.
+     *     }
+     *   } 
+     ********************/
+    var result = {};
+    var profileID = profile.id;
+    var today = new Date();
+
+    // if (player.visitedProfiles.profileID) { // if this player has this ID in their visited profiles
+    //   // var result.profileID = player.visitedProfiles.profileID; // update result with profile from DB
+    //   result.profileID.lastVisited.push(today);
+    // } else { // player has not visited this profile
+    //   result.profileID = {}; // actual player profile
+    //   result.profileID.lastVisited = []; // empty array
+    //   result.profileID.lastVisited.push(today);
+    //   result.profileID.profileStatus = 0;
+    // } // end if (player has visited this profile)
+
+    return result; // this is the updated profile object in play
+  }; // end updateVisitedProfile(profile)
 
 
 }]); // end UserController controller
